@@ -15,6 +15,8 @@ function setup() {
   translateX = 0;
   translateY = 0;
 
+  //c = new Car(0, 150, 175);
+  //c2 = new Car(0, 150, 175);
   for (let i = 0; i < numCars; i++) {
     cars.push(new Car(0, 150, 175));
   }
@@ -42,10 +44,18 @@ function draw() {
     wall.show();
   }
 
+  // Something is very wrong with this code
+  // let toRemove = [];
   for (let car of cars) {
     car.update(trackLimits);
     car.show();
+    // if (car.crashed) {
+    //   toRemove.push(car);
+    // }
   }
+  // for (let car of toRemove) {
+  //   cars.pop(car);
+  // }
 }
 
 function keyPressed() {

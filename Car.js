@@ -1,8 +1,8 @@
 class Car {
-  constructor(a, x, y) {
+  constructor(angle, x, y, genome) {
     this.steering = 0; // FOR MANUAL CONTROL ONLY
     this.throttle = 0;
-    this.angle = a;
+    this.angle = angle;
 
     this.position = new p5.Vector();
     this.position.x = x;
@@ -43,9 +43,14 @@ class Car {
     }
 
     // CREATION OF THE NEURAL NETWORK
-    let structure = [7, 7, 5, 2];
-    this.net = new Network(structure);
-    this.net.randomInit(-50, 50);
+    if (genome != undefined) {
+      // Create from genome
+      this.net = new Network(genome.structure, genome.weights);
+    } else {
+      let structure = [7, 7, 5, 2];
+      this.net = new Network(structure);
+      this.net.randomInit(-50, 50);
+    }
 
     this.crashed = false;
   }
@@ -68,9 +73,7 @@ class Car {
         }
       }
 
-      // If the line collides with a wall
       if (closest) {
-        // Move this to the show function later
         line(this.position.x, this.position.y, closest.x, closest.y);
         outputs.push(record);
       } else {
@@ -138,7 +141,11 @@ class Car {
     }
   }
 
-  mutate() {}
+  getGenome() {
+    // Return a serialized version of network's weights
+    const genome = this.net.getWeights();
+    return { weights: genome[0], structure: genome[1] };
+  }
 
   show() {
     push();
@@ -147,26 +154,26 @@ class Car {
     translate(this.position.x, this.position.y);
     rotate(radians(this.angle));
     fill(0);
-    rect(20, 15, 14, 10); // Front left
-    rect(20, -15, 14, 10); // Front right
+    rect(20, 15, 14, 10);
+    rect(20, -15, 14, 10);
     fill(255, 100, 0);
     stroke(255, 100, 0);
-    rect(30, 0, 20, 10); // Connection from wing to body
-    rect(-5, 0, 50, 28); // Main body
+    rect(30, 0, 20, 10);
+    rect(-5, 0, 50, 28);
     fill(0);
     stroke(0);
-    rect(-20, 15, 14, 10); // Rear left
-    rect(-20, -15, 14, 10); // Rear right
+    rect(-20, 15, 14, 10);
+    rect(-20, -15, 14, 10);
     fill(255, 100, 0);
     stroke(255, 100, 0);
-    rect(25, 0, 10, 20); // Front part of body
+    rect(25, 0, 10, 20);
     stroke(0);
     rect(40, 0, 10, 40); // Front wing
     rect(-30, 0, 14, 30); // Rear wing
     fill(0);
-    rect(0, 0, 20, 10); // Cockpit
+    rect(0, 0, 20, 10);
     fill(0, 50, 220);
-    ellipse(-5, 0, 10); // Driver's head
+    ellipse(-5, 0, 10);
     pop();
   }
 }
