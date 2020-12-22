@@ -16,16 +16,22 @@ For i in range(total cars - number of selected cars):
   Mutate new car slightly by adding or subracting from weights
 */
 
-class GeneticAlgorithm {
-  constructor(population) {
-    this.population = population;
-    this.size = population.length;
-  }
+/*
 
-  evolve(selected) {
-    newPopulation = selected;
-    for (let i = selected.length; i < this.size; i++) {
-      newGenome = newPopulation.push(newGenome); // Crossover and mutation here
-    }
-  }
+  To determine fitness, set one checkpoint
+  Every time the car hits the checkpoint, set the next checkpoint
+
+*/
+class GeneticAlgorithm {
+	constructor(population) {
+		this.population = population;
+		this.size = population.length;
+	}
+
+	evolve(selected) {
+		newPopulation = selected;
+		for (let i = selected.length; i < this.size; i++) {
+			newGenome = newPopulation.push(newGenome); // Crossover and mutation here
+		}
+	}
 }
