@@ -1,5 +1,5 @@
 let cars = [];
-let numCars = 10;
+let numCars = 25;
 let trackLimits = [];
 
 let viewX;
@@ -7,7 +7,11 @@ let viewY;
 let translateX;
 let translateY;
 
+let geneticController;
+let simPaused;
+
 function setup() {
+	simPaused = false;
 	createCanvas(1280, 720);
 
 	viewX = 0;
@@ -17,9 +21,11 @@ function setup() {
 
 	//c = new Car(0, 150, 175);
 	//c2 = new Car(0, 150, 175);
-	for (let i = 0; i < numCars; i++) {
-		cars.push(new Car(0, 150, 175));
-	}
+	// for (let i = 0; i < numCars; i++) {
+	// 	cars.push(new Car(0, 150, 175));
+	// }
+
+	geneticController = new GeneticAlgorithm(numCars, 150, 175, 0);
 
 	trackLimits.push(new Boundary(1000, 125, 1000, 700)); // Outer right edge
 	trackLimits.push(new Boundary(900, 275, 900, 550)); // Inner right edge
@@ -46,16 +52,29 @@ function draw() {
 
 	// Something is very wrong with this code
 	// let toRemove = [];
-	for (let car of cars) {
-		car.update(trackLimits);
-		car.show();
-		// if (car.crashed) {
-		//   toRemove.push(car);
-		// }
-	}
+	// for (let car of cars) {
+	// 	car.update(trackLimits);
+	// 	car.show();
+	// 	// if (car.crashed) {
+	// 	//   toRemove.push(car);
+	// 	// }
+	// }
 	// for (let car of toRemove) {
+	// THIS IS INCORRECT USE OF POP
+	// USE INDEXOF and then SPLICE
 	//   cars.pop(car);
 	// }
+	if (simPaused == true) return;
+	geneticController.runIteration(trackLimits);
+}
+
+function mousePressed() {
+	for (let car of geneticController.population) {
+		if (dist(car.position.x, car.position.y, mouseX, mouseY) < 10) {
+			// Car is clicked
+			geneticController.toggleSelected(car);
+		}
+	}
 }
 
 function keyPressed() {
@@ -73,12 +92,11 @@ function keyPressed() {
 			translateY -= 10;
 			break;
 		case ' ':
-			cars = [];
-			for (let i = 0; i < numCars; i++) {
-				cars.push(new Car(0, 150, 175));
-			}
+			simPaused = true;
+			geneticController.evolve();
 			viewX = 0;
 			viewY = 0;
+			simPaused = false;
 			break;
 	}
 }

@@ -49,7 +49,7 @@ class Car {
 		} else {
 			let structure = [7, 7, 5, 2];
 			this.net = new Network(structure);
-			this.net.randomInit(-50, 50);
+			this.net.randomInit(-100, 100);
 		}
 
 		this.crashed = false;

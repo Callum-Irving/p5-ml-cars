@@ -1,4 +1,5 @@
 function sigmoid(xValue) {
+	// Sigmoid activation function
 	if (xValue > 10) return 1.0;
 	else if (xValue < -10) return 0.0;
 	else return 1.0 / (1.0 + Math.exp(-xValue));
@@ -16,7 +17,10 @@ class Network {
 		if (genome == undefined) return;
 		for (let i = 0; i < this.theta.length; ++i) {
 			let theta = [];
-			const layerWeights = genome.splice(0, structure[i + 1] * (structure[i] + 1));
+			const layerWeights = genome.splice(
+				0,
+				structure[i + 1] * (structure[i] + 1)
+			);
 			for (let j = 0; j < structure[i + 1]; ++j) {
 				theta.push(layerWeights.splice(0, structure[i] + 1));
 			}
